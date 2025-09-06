@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Rock Paper Scissors</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #282c34;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    margin: 0;
+    padding: 40px 20px;
+  }
+  h1 {
+    margin-bottom: 10px;
+  }
+  .choices {
+    margin: 20px 0;
+    display: flex;
+    gap: 20px;
+  }
+  button.choice {
+    background: #61dafb;
+    border: none;
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  button.choice:hover {
+    background: #21a1f1;
+  }
+  .result {
+    margin-top: 25px;
+    font-size: 22px;
+    min-height: 60px;
+  }
+  .scoreboard {
+    margin-top: 30px;
+    font-size: 20px;
+    display: flex;
+    gap: 40px;
+  }
+  .score {
+    background: #444c56;
+    padding: 10px 20px;
+    border-radius: 8px;
+  }
+  .reset-btn {
+    margin-top: 40px;
+    background: #e55353;
+    border: none;
+    padding: 12px 30px;
+    font-size: 18px;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  .reset-btn:hover {
+    background: #c34141;
+  }
+</style>
+</head>
+<body>
+
+<h1>Rock Paper Scissors</h1>
+
+<div class="choices">
+  <button class="choice" data-choice="rock">✊ Rock</button>
+  <button class="choice" data-choice="paper">✋ Paper</button>
+  <button class="choice" data-choice="scissors">✌️ Scissors</button>
+</div>
+
+<div class="result"></div>
+
+<div class="scoreboard">
+  <div class="score" id="player-score">Player: 0</div>
+  <div class="score" id="computer-score">Computer: 0</div>
+</div>
+
+<button class="reset-btn">Reset Game</button>
+
+<script>
+  const choices = ['rock', 'paper', 'scissors'];
+  let playerScore = 0;
+  let computerScore = 0;
+
+  const buttons = document.querySelectorAll('button.choice');
+  const resultDiv = document.querySelector('.result');
+  const playerScoreDiv = document.getElementById('player-score');
+  const computerScoreDiv = document.getElementById('computer-score');
+  const resetBtn = document.querySelector('.reset-btn');
+
+  function getComputerChoice() {
+    const randomIndex = Math.floor(Math.random() * choices.length);
+    return choices[randomIndex];
+  }
+
+  function determineWinner(player, computer) {
+    if (player === computer) return "It's a tie!";
+    if (
+      (player === 'rock' && computer === 'scissors') ||
+      (player === 'paper' && computer === 'rock') ||
+      (player === 'scissors' && computer === 'paper')
+    ) {
+      playerScore++;
+      return "You win! 🎉";
+    } else {
+      computerScore++;
+      return "You lose! 😞";
+    }
+  }
+
+  function updateScores() {
+    playerScoreDiv.textContent = `Player: ${playerScore}`;
+    computerScoreDiv.textContent = `Computer: ${computerScore}`;
+  }
+
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      const playerChoice = button.getAttribute('data-choice');
+      const computerChoice = getComputerChoice();
+      const outcome = determineWinner(playerChoice, computerChoice);
+
+      resultDiv.innerHTML = `
+        You chose <strong>${playerChoice}</strong>.<br/>
+        Computer chose <strong>${computerChoice}</strong>.<br/>
+        <strong>${outcome}</strong>
+      `;
+
+      updateScores();
+    });
+  });
+
+  resetBtn.addEventListener('click', () => {
+    playerScore = 0;
+    computerScore = 0;
+    updateScores();
+    resultDiv.textContent = '';
+  });
+</script>
+
+</body>
+</html>
